@@ -1,0 +1,11 @@
+QVBoxLayout = columns
+QHBoxLayout = rows
+
+
+
+	def keyPressEvent(self, event):
+		if event.key() == Qt.Key_Enter:
+			self.findShortCut()
+
+	def test_method(self):
+		print('Space key pressed')
