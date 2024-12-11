@@ -1,0 +1,99 @@
+# Import modules
+from PyQt5 import uic
+from PyQt5.Qt import Qt
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QVBoxLayout, QLineEdit, QHBoxLayout, QTableWidget
+from sys import exit as sysExit
+import os
+import sys
+
+
+class EditWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Edit shortcuts")
+        self.resize(500, 300)
+
+        
+
+class ShortApp(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.edit = EditWindow()
+        self.main_window = uic.loadUi('main_window.ui', self)
+
+        
+        #self.setWindowTitle("Shortcut App")
+        #self.resize(500, 300)
+
+        # Create all App Objects
+        #self.directory = QLineEdit()
+        #self.file_name = QLineEdit()
+
+        #self.search = QPushButton("Search")
+        #self.search.clicked.connect(self.findShortCut) 
+        #self.goToEdit = QPushButton("EDIT")
+        #self.goToEdit.clicked.connect(self.ShowEditWindow)
+
+        # All Design Here
+        # add the commands and buttons in bottom of the window (to do:)
+        #master_layout = QHBoxLayout()
+        #master_layout.addWidget(self.directory)
+        #master_layout.addWidget(self.file_name)
+        #master_layout.addWidget(self.search)
+        #master_layout.addWidget(self.goToEdit)
+
+        #self.setLayout(master_layout)
+
+    # Method to search the existing shortcuts in the .txt file and open the chosen input file
+    def findShortCut(self):
+        text_directory = self.directory.text()
+        text_file_name = self.file_name.text().lower()
+
+        # iterate over registered shortcuts
+        for dir_name, path in shortcuts.items():
+            # if the name in shortcuts equals the name typed by the user
+            if dir_name == text_directory:
+                # iterate over the files in the registered directory
+                for file in os.listdir(path):
+                    # convert the file name to lower
+                    new_name = file.lower()
+                    # if the name startswith with the name typed by the user
+                    if new_name.startswith(text_file_name):
+                        # glue the path to the file to the path of the directory, creating the final path
+                        filepath = os.path.join(path, new_name)
+                        # jumpstart the chosen file
+                        os.startfile(f"{filepath}") 
+
+
+    # Method to trigger the search with the key "Enter"
+    def keyPressEvent(self, keyEvent):
+        #print("Event :", keyEvent)
+        if keyEvent.key() == Qt.Key_Return or keyEvent.key() == Qt.Key_Enter:
+            self.findShortCut()
+        
+        # closing the main window with ESC
+        elif keyEvent.key() == Qt.Key_Escape:
+            self.close()
+      
+
+    # Method to create a new shortcut. Receives the path as an argument 
+
+
+    def ShowEditWindow(self, checked):
+        self.edit.show()
+
+
+
+
+
+if __name__ == "__main__":
+
+    shortcuts = {}
+
+    # Main App Objects and Settings
+    app = QApplication([])
+    main_window = ShortApp()
+
+    # Show/Run our App
+    main_window.show()
+    sysExit(app.exec_())

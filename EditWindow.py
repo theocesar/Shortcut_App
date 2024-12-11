@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QWidget, QTableWidget, QTableWidgetItem
 import db_connect
 from AddWindow import AddWindow
 from DeleteWindow import DeleteWindow
+from UpdtWindow import UpdtWindow
 
 
 class EditWindow(QWidget):
@@ -24,6 +25,9 @@ class EditWindow(QWidget):
 
         self.delete_short = DeleteWindow()
         self.deleteB.clicked.connect(self.ShowDeleteWindow)
+
+        self.updt_short = UpdtWindow()
+        self.updateB.clicked.connect(self.ShowUpdateWindow)
 
         self.reloadB.clicked.connect(self.loadData)
 
@@ -51,3 +55,6 @@ class EditWindow(QWidget):
 
     def ShowDeleteWindow(self):
         return self.delete_short.show()
+    
+    def ShowUpdateWindow(self):
+        return self.updt_short.show()
