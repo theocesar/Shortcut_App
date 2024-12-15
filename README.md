@@ -1,7 +1,7 @@
 # Shortcuts Manager
 
 ## Overview
-The Shortcuts Manager is a desktop application built using PyQt5 that allows users to efficiently manage custom shortcuts. This includes searching, adding, updating, and deleting shortcuts through a user-friendly graphical interface. The project leverages a local SQLite database (managed via `db_connect`) to store shortcut information, such as names and file paths.
+The Shortcuts Manager is a desktop application built using PyQt5 that allows users to efficiently manage custom shortcuts. This includes searching, adding, updating, and deleting shortcuts through a user-friendly graphical interface. The project leverages a local SQLite database (managed via `db_connect`) to store shortcut information, such as names and file paths. 
 
 ## Features
 - **Search Shortcuts**: Quickly search for shortcuts by name or path, and open matching files directly.
@@ -11,7 +11,7 @@ The Shortcuts Manager is a desktop application built using PyQt5 that allows use
 - **Edit Shortcuts Window**: View and manage all shortcuts in a table with the ability to reload data.
 
 ## Structure
-- **Main Window**:
+- **Main Window**: 
   - Provides options to search for shortcuts and access the editing interface.
   - Search functionality allows users to input the desired file name and path to locate shortcuts.
 - **Edit Shortcuts Window**:
@@ -36,24 +36,12 @@ The Shortcuts Manager is a desktop application built using PyQt5 that allows use
 - **`main.py`**: Main application logic and entry point.
 
 ## Prerequisites
-- **Python 3.7+**
-- **PyQt5**: Install via `pip install pyqt5`
-- **SQLite3**: Integrated with Python for database operations.
+No additional libraries or dependencies are required to use this application.
 
 ## Setup Instructions
-1. Clone this repository:
-   ```bash
-   git clone <repository-url>
-   cd shortcuts-manager
-   ```
-2. Install dependencies:
-   ```bash
-   pip install pyqt5
-   ```
-3. Run the application:
-   ```bash
-   python main.py
-   ```
+1. Download the project to your computer.
+2. Navigate to the `dist` folder.
+3. Execute the `app.exe` file to run the application.
 
 ## Usage
 1. Launch the application.
