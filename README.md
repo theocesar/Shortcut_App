@@ -61,6 +61,3 @@ No additional libraries or dependencies are required to use this application.
 - Implement sorting and filtering in the table view.
 - Add a feature to export/import shortcuts.
 
-## License
-This project is open-source and available under the [MIT License](LICENSE).
-
