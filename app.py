@@ -1,11 +1,24 @@
-# Import modules
 from PyQt5 import uic
-from PyQt5.Qt import Qt
+from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QTableWidgetItem
 import db_connect
 from sys import exit as sysExit
 import os
 import sys
+
+def loadData(tableWidget):
+    rows = db_connect.read_all()
+    tableWidget.setRowCount(len(rows))
+    tableWidget.setColumnCount(2)
+
+    for tablerow, row in enumerate(rows):
+        tableWidget.setItem(tablerow, 0, QTableWidgetItem(row[0]))
+        tableWidget.setItem(tablerow, 1, QTableWidgetItem(row[1]))
+
+def configure_table(tableWidget):
+    tableWidget.setColumnWidth(0, 80)
+    tableWidget.setColumnWidth(1, 400)
+    tableWidget.setHorizontalHeaderLabels(["Name", "Path"])
 
 
 def resource_path(relative_path):
@@ -32,8 +45,8 @@ class ShortApp(QMainWindow):
         self.edit = EditWindow()
 
     def findShortCut(self):
-        name_input = self.file_name.text()  
-        path_input = self.shortcut.text()  
+        name_input = self.file_name.text()
+        path_input = self.shortcut.text()
 
         if not name_input or not path_input:
             print("Por favor, preencha os campos de nome e caminho.")
@@ -48,11 +61,11 @@ class ShortApp(QMainWindow):
             if path_input == shortcut_name:
                 for file in os.listdir(shortcut_path):
                     new_name = file.lower()
-                
+
                     if new_name.startswith(name_input.lower()):
                         filepath = os.path.join(shortcut_path, file)
+                        self.file_name.clear()
                         return os.startfile(filepath)
-
 
     # Método para ativar a busca com "Enter"
     def keyPressEvent(self, keyEvent):
@@ -73,31 +86,23 @@ class EditWindow(QWidget):
 
         uic.loadUi(resource_path('edit.ui'), self)
 
-        self.tableWidget.setColumnWidth(0, 80)
-        self.tableWidget.setColumnWidth(1, 400)
-        self.tableWidget.setHorizontalHeaderLabels(["Name", "Path"])
-        self.loadData()
+        configure_table(self.tableWidget)
+        loadData(self.tableWidget)
 
+        # Sinais para sincronização
         self.add_short = AddWindow()
-        self.addB.clicked.connect(self.ShowAddWindow)
+        self.add_short.data_updated.connect(lambda: loadData(self.tableWidget))
 
         self.delete_short = DeleteWindow()
-        self.deleteB.clicked.connect(self.ShowDeleteWindow)
+        self.delete_short.data_updated.connect(lambda: loadData(self.tableWidget))
 
         self.updt_short = UpdtWindow()
+        self.updt_short.data_updated.connect(lambda: loadData(self.tableWidget))
+
+        # Conexões de botões
+        self.addB.clicked.connect(self.ShowAddWindow)
+        self.deleteB.clicked.connect(self.ShowDeleteWindow)
         self.updateB.clicked.connect(self.ShowUpdateWindow)
-
-        self.reloadB.clicked.connect(self.loadData)
-
-    def loadData(self):
-        rows = db_connect.read_all()
-
-        self.tableWidget.setRowCount(len(rows))
-        self.tableWidget.setColumnCount(2)
-
-        for tablerow, row in enumerate(rows):
-            self.tableWidget.setItem(tablerow, 0, QTableWidgetItem(row[0]))
-            self.tableWidget.setItem(tablerow, 1, QTableWidgetItem(row[1]))
 
     def CloseWindow(self):
         return self.close()
@@ -118,6 +123,8 @@ class EditWindow(QWidget):
 
 
 class AddWindow(QWidget):
+    data_updated = pyqtSignal()  # Sinal para sincronizar dados
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Add shortcut")
@@ -132,7 +139,10 @@ class AddWindow(QWidget):
 
         db_connect.insert(name, path)
 
-        return self.CloseWindow()
+        self.data_updated.emit()  # Emite o sinal
+        self.name.clear()
+        self.path.clear()
+        self.CloseWindow()
 
     def CloseWindow(self):
         return self.close()
@@ -144,6 +154,8 @@ class AddWindow(QWidget):
 
 
 class DeleteWindow(QWidget):
+    data_updated = pyqtSignal()  # Sinal para sincronizar dados
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Delete shortcut")
@@ -157,7 +169,9 @@ class DeleteWindow(QWidget):
 
         db_connect.delete(name)
 
-        return self.CloseWindow()
+        self.data_updated.emit()  # Emite o sinal
+        self.name.clear()
+        self.CloseWindow()
 
     def CloseWindow(self):
         return self.close()
@@ -169,6 +183,8 @@ class DeleteWindow(QWidget):
 
 
 class UpdtWindow(QWidget):
+    data_updated = pyqtSignal()  # Sinal para sincronizar dados
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Update shortcut")
@@ -183,7 +199,10 @@ class UpdtWindow(QWidget):
 
         db_connect.insert(name, path)
 
-        return self.CloseWindow()
+        self.data_updated.emit()  # Emite o sinal
+        self.name.clear()
+        self.path.clear()
+        self.CloseWindow()
 
     def CloseWindow(self):
         return self.close()
