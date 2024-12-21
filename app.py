@@ -151,6 +151,8 @@ class AddWindow(QWidget):
     def keyPressEvent(self, keyEvent):
         if keyEvent.key() == Qt.Key_Escape:
             self.close()
+        if keyEvent.key() == Qt.Key_Return or keyEvent.key() == Qt.Key_Enter:
+            self.add_shortcut
 
 
 class DeleteWindow(QWidget):
@@ -180,6 +182,8 @@ class DeleteWindow(QWidget):
     def keyPressEvent(self, keyEvent):
         if keyEvent.key() == Qt.Key_Escape:
             self.close()
+        if keyEvent.key() == Qt.Key_Return or keyEvent.key() == Qt.Key_Enter:
+            self.delete_shortcut
 
 
 class UpdtWindow(QWidget):
@@ -211,6 +215,8 @@ class UpdtWindow(QWidget):
     def keyPressEvent(self, keyEvent):
         if keyEvent.key() == Qt.Key_Escape:
             self.close()
+        if keyEvent.key() == Qt.Key_Return or keyEvent.key() == Qt.Key_Enter:
+            self.update_shortcut
 
 
 if __name__ == "__main__":
