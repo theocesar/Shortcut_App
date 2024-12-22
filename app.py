@@ -37,6 +37,9 @@ class ShortApp(QMainWindow):
 
         db_connect.create_table()
 
+        # Preenche o QComboBox com atalhos existentes
+        self.populateShortcuts()
+
         # Conectar os botões e campos de texto a funções
         self.searchB.clicked.connect(self.findShortCut)
         self.editB.clicked.connect(self.ShowEditWindow)
@@ -44,9 +47,14 @@ class ShortApp(QMainWindow):
         # Criar a janela de edição
         self.edit = EditWindow()
 
+    def populateShortcuts(self):
+        # Obter os atalhos do banco de dados e adicionar ao combo box
+        shortcuts = [row[0] for row in db_connect.read_all()]
+        self.shortcut.addItems(shortcuts)
+
     def findShortCut(self):
         name_input = self.file_name.text()
-        path_input = self.shortcut.text()
+        path_input = self.shortcut.currentText()  # Usar o texto selecionado no combo box
 
         if not name_input or not path_input:
             print("Por favor, preencha os campos de nome e caminho.")
@@ -64,7 +72,6 @@ class ShortApp(QMainWindow):
 
                     if new_name.startswith(name_input.lower()):
                         filepath = os.path.join(shortcut_path, file)
-                        self.file_name.clear()
                         return os.startfile(filepath)
 
     # Método para ativar a busca com "Enter"
@@ -152,7 +159,7 @@ class AddWindow(QWidget):
         if keyEvent.key() == Qt.Key_Escape:
             self.close()
         if keyEvent.key() == Qt.Key_Return or keyEvent.key() == Qt.Key_Enter:
-            self.add_shortcut
+            self.add_shortcut()
 
 
 class DeleteWindow(QWidget):
@@ -183,7 +190,7 @@ class DeleteWindow(QWidget):
         if keyEvent.key() == Qt.Key_Escape:
             self.close()
         if keyEvent.key() == Qt.Key_Return or keyEvent.key() == Qt.Key_Enter:
-            self.delete_shortcut
+            self.delete_shortcut()
 
 
 class UpdtWindow(QWidget):
@@ -216,7 +223,7 @@ class UpdtWindow(QWidget):
         if keyEvent.key() == Qt.Key_Escape:
             self.close()
         if keyEvent.key() == Qt.Key_Return or keyEvent.key() == Qt.Key_Enter:
-            self.update_shortcut
+            self.update_shortcut()
 
 
 if __name__ == "__main__":
