@@ -40,15 +40,17 @@ class ShortApp(QMainWindow):
         # Preenche o QComboBox com atalhos existentes
         self.populateShortcuts()
 
+        # Criar a janela de edição e conectar o sinal
+        self.edit = EditWindow()
+        self.edit.data_updated.connect(self.populateShortcuts)
+
         # Conectar os botões e campos de texto a funções
         self.searchB.clicked.connect(self.findShortCut)
         self.editB.clicked.connect(self.ShowEditWindow)
 
-        # Criar a janela de edição
-        self.edit = EditWindow()
-
     def populateShortcuts(self):
         # Obter os atalhos do banco de dados e adicionar ao combo box
+        self.shortcut.clear()  # Limpar os itens existentes no QComboBox
         shortcuts = [row[0] for row in db_connect.read_all()]
         self.shortcut.addItems(shortcuts)
 
@@ -72,6 +74,7 @@ class ShortApp(QMainWindow):
 
                     if new_name.startswith(name_input.lower()):
                         filepath = os.path.join(shortcut_path, file)
+                        self.file_name.clear()
                         return os.startfile(filepath)
 
     # Método para ativar a busca com "Enter"
@@ -87,6 +90,9 @@ class ShortApp(QMainWindow):
 
 
 class EditWindow(QWidget):
+    # Declare o signal como atributo da classe
+    data_updated = pyqtSignal()
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Edit shortcuts")
@@ -96,25 +102,30 @@ class EditWindow(QWidget):
         configure_table(self.tableWidget)
         loadData(self.tableWidget)
 
-        # Sinais para sincronização
+        # Conecte os signals dos sub-windows para sincronização
         self.add_short = AddWindow()
-        self.add_short.data_updated.connect(lambda: loadData(self.tableWidget))
+        self.add_short.data_updated.connect(self.emitDataUpdated)
 
         self.delete_short = DeleteWindow()
-        self.delete_short.data_updated.connect(lambda: loadData(self.tableWidget))
+        self.delete_short.data_updated.connect(self.emitDataUpdated)
 
         self.updt_short = UpdtWindow()
-        self.updt_short.data_updated.connect(lambda: loadData(self.tableWidget))
+        self.updt_short.data_updated.connect(self.emitDataUpdated)
 
         # Conexões de botões
         self.addB.clicked.connect(self.ShowAddWindow)
         self.deleteB.clicked.connect(self.ShowDeleteWindow)
         self.updateB.clicked.connect(self.ShowUpdateWindow)
 
+    def emitDataUpdated(self):
+        # Emite o sinal para notificar mudanças
+        self.data_updated.emit()
+        loadData(self.tableWidget)
+
     def CloseWindow(self):
         return self.close()
 
-    # Método fechar a window
+    # Método fechar a janela com Escape
     def keyPressEvent(self, keyEvent):
         if keyEvent.key() == Qt.Key_Escape:
             self.close()
