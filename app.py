@@ -7,6 +7,7 @@ import os
 import sys
 
 def loadData(tableWidget):
+    # Updating the tables
     rows = db_connect.read_all()
     tableWidget.setRowCount(len(rows))
     tableWidget.setColumnCount(2)
