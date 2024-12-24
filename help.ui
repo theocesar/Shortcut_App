@@ -18,7 +18,7 @@
     <rect>
      <x>140</x>
      <y>60</y>
-     <width>261</width>
+     <width>280</width>
      <height>81</height>
     </rect>
    </property>
@@ -26,21 +26,21 @@
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>ENTER or Return to trigger the SEARCH button</string>
+       <string>ENTER or Return to trigger the buttons</string>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QLabel" name="label_3">
       <property name="text">
-       <string>CTRL + W to close the searched file</string>
+       <string>CTRL + W to close the searched file (.txt only)</string>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>ESC to close the window app</string>
+       <string>ESC to close a window</string>
       </property>
      </widget>
     </item>

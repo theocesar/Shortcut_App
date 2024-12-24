@@ -29,6 +29,19 @@ def resource_path(relative_path):
     return os.path.join(os.path.abspath("."), relative_path)
 
 
+class HelpWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        # Carrega o arquivo .ui
+        uic.loadUi(resource_path('help.ui'), self)
+
+    # Método fechar a janela com Escape
+    def keyPressEvent(self, keyEvent):
+        if keyEvent.key() == Qt.Key_Escape:
+            self.close()
+
+
 class ShortApp(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -45,9 +58,12 @@ class ShortApp(QMainWindow):
         self.edit = EditWindow()
         self.edit.data_updated.connect(self.populateShortcuts)
 
+        self.help = HelpWindow()
+
         # Conectar os botões e campos de texto a funções
         self.searchB.clicked.connect(self.findShortCut)
         self.editB.clicked.connect(self.ShowEditWindow)
+        self.helpB.clicked.connect(self.ShowHelpWindow)
 
     def populateShortcuts(self):
         # Obter os atalhos do banco de dados e adicionar ao combo box
@@ -88,6 +104,9 @@ class ShortApp(QMainWindow):
     # Método para exibir a janela de edição
     def ShowEditWindow(self):
         self.edit.show()
+    
+    def ShowHelpWindow(self):
+        self.help.show()
 
 
 class EditWindow(QWidget):
@@ -122,9 +141,6 @@ class EditWindow(QWidget):
         # Emite o sinal para notificar mudanças
         self.data_updated.emit()
         loadData(self.tableWidget)
-
-    def CloseWindow(self):
-        return self.close()
 
     # Método fechar a janela com Escape
     def keyPressEvent(self, keyEvent):
