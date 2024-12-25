@@ -1,3 +1,3 @@
 create venv = python -m venv .venv
 activate venv = .\.venv\Scripts\activate
-pyinstaller --onefile --noconsole --add-data 'shortcuts.db:.' --add-data 'main_window.ui:.' --add-data 'edit.ui:.' --add-data 'help.ui:.' --add-data 'add_short.ui:.' --add-data 'del_short.ui:.' --add-data 'updt_short.ui:.' app.py
+pyinstaller --onefile --noconsole --add-data 'main_window.ui;.' --add-data 'edit.ui;.' --add-data 'help.ui;.' --add-data 'add_short.ui;.' --add-data 'del_short.ui;.' --add-data 'updt_short.ui;.' app.py
