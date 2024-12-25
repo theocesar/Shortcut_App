@@ -1,3 +1,2 @@
-*.spec linguist-detectable=false
 *.html linguist-detectable=false
 *.exe linguist-detectable=false
