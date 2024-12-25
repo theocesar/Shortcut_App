@@ -1,2 +1,3 @@
-*.tex linguist-detectable
-*.python linguist-detectable
+*.spec linguist-detectable
+*.html linguist-detectable
+*.exe linguist-detectable
