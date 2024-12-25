@@ -1,2 +1,2 @@
-*.tex linguist-detectable=true
-*.html linguist-detectable=true
+*.tex linguist-detectable
+*.html linguist-detectable
