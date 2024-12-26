@@ -19,7 +19,7 @@
      <rect>
       <x>0</x>
       <y>110</y>
-      <width>511</width>
+      <width>521</width>
       <height>81</height>
      </rect>
     </property>
@@ -32,9 +32,9 @@
     <widget class="QPushButton" name="searchB">
      <property name="geometry">
       <rect>
-       <x>340</x>
+       <x>360</x>
        <y>30</y>
-       <width>91</width>
+       <width>71</width>
        <height>22</height>
       </rect>
      </property>
@@ -52,19 +52,6 @@
       </rect>
      </property>
     </widget>
-    <widget class="QToolButton" name="editB">
-     <property name="geometry">
-      <rect>
-       <x>435</x>
-       <y>30</y>
-       <width>31</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>EDIT</string>
-     </property>
-    </widget>
     <widget class="QComboBox" name="shortcut">
      <property name="geometry">
       <rect>
@@ -75,10 +62,33 @@
       </rect>
      </property>
     </widget>
+    <widget class="QComboBox" name="archives">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>55</y>
+       <width>151</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QToolButton" name="editB">
+     <property name="geometry">
+      <rect>
+       <x>435</x>
+       <y>30</y>
+       <width>51</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>EDIT</string>
+     </property>
+    </widget>
     <widget class="QPushButton" name="helpB">
      <property name="geometry">
       <rect>
-       <x>470</x>
+       <x>490</x>
        <y>30</y>
        <width>20</width>
        <height>22</height>

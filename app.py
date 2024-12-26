@@ -29,19 +29,6 @@ def resource_path(relative_path):
     return os.path.join(os.path.abspath("."), relative_path)
 
 
-class HelpWindow(QWidget):
-    def __init__(self):
-        super().__init__()
-
-        # Carrega o arquivo .ui
-        uic.loadUi(resource_path('help.ui'), self)
-
-    # Método fechar a janela com Escape
-    def keyPressEvent(self, keyEvent):
-        if keyEvent.key() == Qt.Key_Escape:
-            self.close()
-
-
 class ShortApp(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -51,32 +38,54 @@ class ShortApp(QMainWindow):
 
         db_connect.create_table()
 
-        # Preenche o QComboBox com atalhos existentes
         self.populateShortcuts()
 
-        # Criar a janela de edição e conectar o sinal
         self.edit = EditWindow()
         self.edit.data_updated.connect(self.populateShortcuts)
 
         self.help = HelpWindow()
 
-        # Conectar os botões e campos de texto a funções
         self.searchB.clicked.connect(self.findShortCut)
         self.editB.clicked.connect(self.ShowEditWindow)
         self.helpB.clicked.connect(self.ShowHelpWindow)
 
+        self.shortcut.currentIndexChanged.connect(self.populateArchives)
+
     def populateShortcuts(self):
-        # Obter os atalhos do banco de dados e adicionar ao combo box
-        self.shortcut.clear()  # Limpar os itens existentes no QComboBox
+        self.shortcut.clear()
+        self.shortcut.addItem("Selecione")
         shortcuts = [row[0] for row in db_connect.read_all()]
         self.shortcut.addItems(shortcuts)
+        self.populateArchives()
+
+    def populateArchives(self):
+        self.archives.clear()
+        self.archives.addItem("Selecione")
+        selected_shortcut = self.shortcut.currentText()
+        if selected_shortcut == "Selecione":
+            return
+
+        rows = db_connect.read_all()
+
+        for row in rows:
+            shortcut_name = row[0]
+            shortcut_path = row[1]
+
+            if selected_shortcut == shortcut_name:
+                try:
+                    files = os.listdir(shortcut_path)
+                    self.archives.addItems(files)
+                except FileNotFoundError:
+                    print(f"Diretório não encontrado: {shortcut_path}")
+                break
 
     def findShortCut(self):
         name_input = self.file_name.text()
-        path_input = self.shortcut.currentText()  # Usar o texto selecionado no combo box
+        path_input = self.shortcut.currentText()
+        selected_file = self.archives.currentText()
 
-        if not name_input or not path_input:
-            print("Por favor, preencha os campos de nome e caminho.")
+        if path_input == "Selecione" or (not name_input and selected_file == "Selecione"):
+            print("Por favor, selecione um atalho e/ou arquivo.")
             return
 
         rows = db_connect.read_all()
@@ -86,9 +95,12 @@ class ShortApp(QMainWindow):
             shortcut_path = row[1]
 
             if path_input == shortcut_name:
+                if selected_file != "Selecione":
+                    filepath = os.path.join(shortcut_path, selected_file)
+                    return os.startfile(filepath)
+
                 for file in os.listdir(shortcut_path):
                     new_name = file.lower()
-
                     if new_name.startswith(name_input.lower()):
                         filepath = os.path.join(shortcut_path, file)
                         self.file_name.clear()
@@ -108,6 +120,19 @@ class ShortApp(QMainWindow):
     def ShowHelpWindow(self):
         self.help.show()
 
+
+
+class HelpWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        # Carrega o arquivo .ui
+        uic.loadUi(resource_path('help.ui'), self)
+
+    # Método fechar a janela com Escape
+    def keyPressEvent(self, keyEvent):
+        if keyEvent.key() == Qt.Key_Escape:
+            self.close()
 
 class EditWindow(QWidget):
     # Declare o signal como atributo da classe
