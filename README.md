@@ -19,6 +19,8 @@ The Shortcuts Manager is a desktop application built using PyQt5 that allows use
   - Buttons to add, update, delete, and reload shortcut data.
 - **Add, Update, and Delete Windows**:
   - Individual forms to manage shortcut data.
+- **Help Window**:
+  - Shows all the available keyboard commands.
 
 ## How It Works
 1. **Database Management**: The `db_connect` module handles SQLite database operations, including creating the table, inserting, updating, reading, and deleting records.
@@ -32,6 +34,7 @@ The Shortcuts Manager is a desktop application built using PyQt5 that allows use
 - **`add_short.ui`**: UI for adding new shortcuts.
 - **`del_short.ui`**: UI for deleting shortcuts.
 - **`updt_short.ui`**: UI for updating existing shortcuts.
+- **`help.ui`**: UI for showing the available commands
 - **`db_connect.py`**: Handles database operations (create, read, update, delete).
 - **`main.py`**: Main application logic and entry point.
 
@@ -40,8 +43,7 @@ No additional libraries or dependencies are required to use this application.
 
 ## Setup Instructions
 1. Download the project to your computer.
-2. Navigate to the `dist` folder.
-3. Execute the `app.exe` file to run the application.
+2. Execute the `app.exe` file to run the application.
 
 ## Usage
 1. Launch the application.
@@ -53,11 +55,6 @@ No additional libraries or dependencies are required to use this application.
    - Add, update, or delete shortcuts using the corresponding buttons.
 
 ## Key Bindings
-- **Enter**: Trigger search functionality.
+- **Enter | Return**: Trigger search functionality.
 - **Escape**: Close the current window.
-
-## Future Improvements
-- Add drag-and-drop functionality for easier path selection.
-- Implement sorting and filtering in the table view.
-- Add a feature to export/import shortcuts.
 
