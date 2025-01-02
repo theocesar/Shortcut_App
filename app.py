@@ -197,6 +197,7 @@ class AddWindow(QWidget):
         name = self.name.text()
         path = self.path.text()
 
+    #   Add 1: Verify if the name doesn't exist already in database
         db_connect.insert(name, path)
 
         self.data_updated.emit()  # Emite o sinal
@@ -229,6 +230,7 @@ class DeleteWindow(QWidget):
     def delete_shortcut(self):
         name = self.name.text()
 
+        # Add 1: Verify if the name exists in the database
         db_connect.delete(name)
 
         self.data_updated.emit()  # Emite o sinal
@@ -261,6 +263,7 @@ class UpdtWindow(QWidget):
         name = self.name.text()
         path = self.path.text()
 
+        # Add 1: Verify if the name exists in the database
         db_connect.insert(name, path)
 
         self.data_updated.emit()  # Emite o sinal
