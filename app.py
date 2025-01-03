@@ -192,15 +192,22 @@ class AddWindow(QWidget):
         uic.loadUi(resource_path('add_short.ui'), self)
 
         self.addB.clicked.connect(self.add_shortcut)
-
+    
     def add_shortcut(self):
         name = self.name.text()
         path = self.path.text()
 
-    #   Add 1: Verify if the name doesn't exist already in database
-        db_connect.insert(name, path)
+        #   Add 1: Verify if the name doesn't exist already in database [DONE]
+        existing_shortcuts = db_connect.read_all()
+        if any(row[0] == name for row in existing_shortcuts):
+            print(f"Erro: Esse nome '{name}' já existe no banco de dados. Por favor, digite um nome válido.")
+            return
+        if any(row[1] == path for row in existing_shortcuts):
+            print(f"Erro: O caminho '{path}' já está associado a outro atalho. Por favor, digite um caminho válido.")
+            return
 
-        self.data_updated.emit()  # Emite o sinal
+        db_connect.insert(name, path)
+        self.data_updated.emit() # Emite o sinal
         self.name.clear()
         self.path.clear()
         self.CloseWindow()
@@ -226,14 +233,18 @@ class DeleteWindow(QWidget):
         uic.loadUi(resource_path('del_short.ui'), self)
 
         self.delB.clicked.connect(self.delete_shortcut)
-
+    
     def delete_shortcut(self):
         name = self.name.text()
 
-        # Add 1: Verify if the name exists in the database
-        db_connect.delete(name)
+        # Add 1: Verify if the name exists in the database [DONE]
+        existing_shortcuts = [row[0] for row in db_connect.read_all()]
+        if name not in existing_shortcuts:
+            print(f"Erro: O atalho '{name}' não foi encontrado. Por favor, escolha um atalho válido!")
+            return
 
-        self.data_updated.emit()  # Emite o sinal
+        db_connect.delete(name)
+        self.data_updated.emit() # Emite o sinal
         self.name.clear()
         self.CloseWindow()
 
@@ -263,10 +274,17 @@ class UpdtWindow(QWidget):
         name = self.name.text()
         path = self.path.text()
 
-        # Add 1: Verify if the name exists in the database
-        db_connect.insert(name, path)
+        # Add 1: Verify if the name exists in the database [DONE]
+        existing_shortcuts = db_connect.read_all()
+        if not any(row[0] == name for row in existing_shortcuts):
+            print(f"Erro: O atalho '{name}' não foi encontrado. Por favor, digite um nome válido.")
+            return
+        if any(row[1] == path and row[0] != name for row in existing_shortcuts):
+            print(f"Erro: O caminho '{path}' já está associado a outro atalho. Por favor, digite um caminho válido.")
+            return
 
-        self.data_updated.emit()  # Emite o sinal
+        db_connect.insert(name, path)
+        self.data_updated.emit()
         self.name.clear()
         self.path.clear()
         self.CloseWindow()
